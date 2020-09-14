@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon query.js",
+    "import-data": "node import.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "mongodb": "^3.6.2",
     "read-xml": "^3.0.0",
     "xml2json": "^0.12.0"
   },
