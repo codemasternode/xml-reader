@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<offers>
+  <offer idObject="1990e5c7-3c68-4429-8619-ee222531f3f6" id="dd28dd1f-0b5a-453c-9543-3967506d1f6d">
+    <name>1</name>
+    <readyFrom>2020-10-25</readyFrom>
+    <readyTo>2020-12-16</readyTo>
+    <reservations>
+      <reservation from="2020-11-05" to="2020-12-12"/>
+      <reservation from="2020-12-13" to="2020-12-13"/>
+      <reservation from="2020-12-14" to="2020-12-15"/>
+    </reservations>
+  </offer>
+  <offer idObject="1990e5c7-3c68-4429-8619-ee222531f3f6" id="15886322-3488-41d1-b53a-47d0a1ba9f21">
+    <name>2</name>
+    <readyFrom>2020-10-25</readyFrom>
+    <readyTo>2020-12-16</readyTo>
+    <reservations>
+      <reservation from="2020-11-12" to="2020-12-04"/>
+      <reservation from="2020-12-14" to="2020-12-15"/>
+    </reservations>
+  </offer>
+  <offer idObject="1990e5c7-3c68-4429-8619-ee222531f3f6" id="2a0920ef-203d-4835-9265-2f0d237eaa2d">
+    <name>3</name>
+    <readyFrom>2020-10-25</readyFrom>
+    <readyTo>2020-12-16</readyTo>
+    <reservations>
+      <reservation from="2020-10-30" to="2020-11-17"/>
+      <reservation from="2020-11-19" to="2020-12-09"/>
+      <reservation from="2020-12-13" to="2020-12-15"/>
+    </reservations>
+  </offer>
+  <offer idObject="26d670d6-e02d-44fc-8628-d18ced092b86" id="bf671da3-8d35-4b23-ae36-b86afe981f94">
+    <name>1</name>
+    <readyFrom>2020-12-17</readyFrom>
+    <readyTo>2020-12-30</readyTo>
+    <reservations>
+      <reservation from="2020-12-17" to="2020-12-26"/>
+      <reservation from="2020-12-26" to="2020-12-29"/>
+    </reservations>
+  </offer>
+  <offer idObject="26d670d6-e02d-44fc-8628-d18ced092b86" id="761d6a1e-d762-42cb-9ad9-217a4ad6efa0">
+    <name>2</name>
+    <readyFrom>2020-12-17</readyFrom>
+    <readyTo>2020-12-30</readyTo>
+    <reservations>
+      <reservation from="2020-12-27" to="2020-12-27"/>
+      <reservation from="2020-12-27" to="2020-12-27"/>
+      <reservation from="2020-12-28" to="2020-12-29"/>
+    </reservations>
+  </offer>
+  <offer idObject="4484371f-6fbb-4c9b-b46a-26fb63eb7900" id="b530f2a2-1f52-4e15-8746-6ad74a1b43d4">
+    <name>1</name>
+    <readyFrom>2020-08-16</readyFrom>
+    <readyTo>2020-09-14</readyTo>
+    <reservations>
+      <reservation from="2020-08-24" to="2020-09-05"/>
+      <reservation from="2020-09-11" to="2020-09-13"/>
+    </reservations>
+  </offer>
+</offers>
