@@ -116,9 +116,6 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
         }
       }
       for (let i = 0; i < selectedOffers.length; i++) {
-        if (selectedOffers[i].to === undefined) {
-          console.log(selectedOffers[i])
-        }
         console.log(
           `${selectedOffers[i].idObject} ${selectedOffers[i].id} ${formatDate(
             selectedOffers[i].from
@@ -134,6 +131,5 @@ function getNumberOfDays(miliseconds) {
 }
 
 function formatDate(date) {
-  console.log(date)
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  return `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
 }
