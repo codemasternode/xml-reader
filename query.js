@@ -11,7 +11,7 @@ const dateFrom = new Date(process.argv[2]);
 const dateTo = new Date(process.argv[3]);
 const numberOfDays = Number(process.argv[4]);
 
-if (getNumberOfDays(dateTo - dateFrom) < numberOfDays) {
+if (getNumberOfDays(dateTo - dateFrom) < numberOfDays - 1) {
   throw new Error(
     "Number of days is smaller than difference between dateFrom and dateTo"
   );
@@ -26,18 +26,10 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
     .find({})
     .toArray(function (err, offers) {
       const selectedOffers = [];
-      console.log(dateFrom, dateTo, numberOfDays);
       for (let i = 0; i < offers.length; i++) {
-        if (
-          (offers[i].readyFrom > dateFrom && offers[i].readyTo > dateFrom) ||
-          offers[i].readyTo < dateFrom ||
-          (offers[i].readyFrom <= dateFrom &&
-            offers[i].readyTo < dateTo &&
-            getNumberOfDays(offers[i].readyTo - dateFrom) < numberOfDays) ||
-          (offers[i].readyFrom > dateTo &&
-            offers[i].readyTo > dateTo &&
-            getNumberOfDays(dateTo - offers[i].readyFrom) < numberOfDays)
-        ) {
+        if (offers[i].id === "393eb535-a2d5-4093-9681-e0f6a100fa4c") {
+        }
+        if (offers[i].readyFrom > dateTo || offers[i].readyTo < dateFrom) {
           continue;
         }
 
@@ -64,8 +56,10 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
           }
         }
 
-        if (offers[i].id === "393eb535-a2d5-4093-9681-e0f6a100fa4c") {
-          console.log(avaiableDays);
+        for (let k = 0; k < avaiableDays.length; k++) {
+          if (avaiableDays[k] < dateFrom || avaiableDays[k] > dateTo) {
+            avaiableDays[k] = null;
+          }
         }
 
         let countDays = 1;
@@ -110,13 +104,6 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
         }
 
         if (countDays === numberOfDays) {
-          if (
-            offers[i].id === "393eb535-a2d5-4093-9681-e0f6a100fa4c" &&
-            offers[i].idObject === "7a5f6fe3-c2c9-4681-a808-4e22e05ab261"
-          ) {
-            console.log(avaiableDays[start]);
-          }
-
           selectedOffers.push({
             id: offers[i].id,
             idObject: offers[i].idObject,
@@ -124,15 +111,7 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
           });
         }
       }
-      for (let g = 0; g < selectedOffers.length; g++) {
-        if (
-          selectedOffers[g].id === "393eb535-a2d5-4093-9681-e0f6a100fa4c" &&
-          selectedOffers[g].idObject === "7a5f6fe3-c2c9-4681-a808-4e22e05ab261"
-        ) {
-          console.log(selectedOffers[g]);
-        }
-      }
-
+      console.log(selectedOffers);
       db.close();
     });
 });
