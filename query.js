@@ -41,7 +41,6 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
         ) {
           avaiableDays.push(new Date(d));
         }
-        //console.log(avaiableDays);
 
         offers[i].reservations.sort((a, b) => a.from - b.from);
         for (let k = 0; k < offers[i].reservations.length; k++) {
@@ -73,9 +72,13 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
 
         loop: for (let h = start + 1; h < avaiableDays.length; h++) {
           if (countDays === numberOfDays) {
+            const to = new Date(avaiableDays[start]);
+            to.setDate(to.getDate() + numberOfDays - 1);
             selectedOffers.push({
               id: offers[i].id,
+              idObject: offers[i].idObject,
               from: avaiableDays[start],
+              to: to,
             });
             countDays = 1;
             start++;
@@ -111,11 +114,21 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
           });
         }
       }
-      console.log(selectedOffers);
+      for (let i = 0; i < selectedOffers.length; i++) {
+        console.log(
+          `${selectedOffers[i].idObject} ${selectedOffers[i].id} ${formatDate(
+            selectedOffers[i].from
+          )} ${formatDate(selectedOffers[i].to)}`
+        );
+      }
       db.close();
     });
 });
 
 function getNumberOfDays(miliseconds) {
   return Math.ceil(miliseconds / 86400400);
+}
+
+function formatDate(date) {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
