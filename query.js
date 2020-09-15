@@ -43,8 +43,8 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
 
         const avaiableDays = [];
         for (
-          var d = new Date(dateFrom);
-          d <= new Date(dateTo);
+          var d = new Date(offers[i].readyFrom);
+          d <= new Date(offers[i].readyTo);
           d.setDate(d.getDate() + 1)
         ) {
           avaiableDays.push(new Date(d));
@@ -59,32 +59,77 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
               avaiableDays[m] >= reservation.from &&
               avaiableDays[m] <= reservation.to
             ) {
-              avaiableDays.splice(m, 1);
-              m--;
+              avaiableDays[m] = null;
             }
           }
         }
-        let countDays = 0;
-        let startPoint = avaiableDays[0];
-        for (let k = 1; k < avaiableDays.length; k++) {
-          if (getNumberOfDays(avaiableDays[k] - avaiableDays[k - 1]) === 1) {
-            countDays++;
-            if (countDays === numberOfDays) {
-              countDays = 0;
-              selectedOffers.push({
-                id: offers[i].id,
-                idObject: offers[i].idObject,
-                from: startPoint,
-                to: avaiableDays[k],
-              });
-              startPoint = avaiableDays[k];
-            }
-          } else {
-            countDays = 0;
-          }
-        }
+
         if (offers[i].id === "393eb535-a2d5-4093-9681-e0f6a100fa4c") {
-          console.log(selectedOffers);
+          console.log(avaiableDays);
+        }
+
+        let countDays = 1;
+        let start = 0;
+        while (
+          avaiableDays[start] === null &&
+          avaiableDays[start] !== undefined
+        ) {
+          start++;
+        }
+
+        loop: for (let h = start + 1; h < avaiableDays.length; h++) {
+          if (countDays === numberOfDays) {
+            selectedOffers.push({
+              id: offers[i].id,
+              from: avaiableDays[start],
+            });
+            countDays = 1;
+            start++;
+            while (
+              avaiableDays[start] === null &&
+              avaiableDays[start] !== undefined
+            ) {
+              start++;
+            }
+            h = start;
+            if (avaiableDays[start] === undefined) {
+              break loop;
+            }
+          } else if (avaiableDays[h] === null) {
+            countDays = 0;
+            start = h;
+            while (
+              avaiableDays[start] === null &&
+              avaiableDays[start] !== undefined
+            ) {
+              start++;
+            }
+          } else if (avaiableDays[h] !== null) {
+            countDays++;
+          }
+        }
+
+        if (countDays === numberOfDays) {
+          if (
+            offers[i].id === "393eb535-a2d5-4093-9681-e0f6a100fa4c" &&
+            offers[i].idObject === "7a5f6fe3-c2c9-4681-a808-4e22e05ab261"
+          ) {
+            console.log(avaiableDays[start]);
+          }
+
+          selectedOffers.push({
+            id: offers[i].id,
+            idObject: offers[i].idObject,
+            from: avaiableDays[start],
+          });
+        }
+      }
+      for (let g = 0; g < selectedOffers.length; g++) {
+        if (
+          selectedOffers[g].id === "393eb535-a2d5-4093-9681-e0f6a100fa4c" &&
+          selectedOffers[g].idObject === "7a5f6fe3-c2c9-4681-a808-4e22e05ab261"
+        ) {
+          console.log(selectedOffers[g]);
         }
       }
 
