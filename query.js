@@ -27,8 +27,6 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
     .toArray(function (err, offers) {
       const selectedOffers = [];
       for (let i = 0; i < offers.length; i++) {
-        if (offers[i].id === "393eb535-a2d5-4093-9681-e0f6a100fa4c") {
-        }
         if (offers[i].readyFrom > dateTo || offers[i].readyTo < dateFrom) {
           continue;
         }
@@ -107,14 +105,20 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
         }
 
         if (countDays === numberOfDays) {
+          const to = new Date(avaiableDays[start]);
+          to.setDate(to.getDate() + numberOfDays - 1);
           selectedOffers.push({
             id: offers[i].id,
             idObject: offers[i].idObject,
             from: avaiableDays[start],
+            to
           });
         }
       }
       for (let i = 0; i < selectedOffers.length; i++) {
+        if (selectedOffers[i].to === undefined) {
+          console.log(selectedOffers[i])
+        }
         console.log(
           `${selectedOffers[i].idObject} ${selectedOffers[i].id} ${formatDate(
             selectedOffers[i].from
@@ -130,5 +134,6 @@ function getNumberOfDays(miliseconds) {
 }
 
 function formatDate(date) {
+  console.log(date)
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
