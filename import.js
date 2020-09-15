@@ -1,31 +1,25 @@
 const fs = require("fs"),
   path = require("path"),
   xmlReader = require("read-xml"),
-  MongoClient = require('mongodb').MongoClient,
+  MongoClient = require("mongodb").MongoClient,
   url = "mongodb://localhost:27017/";
 
 MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
   if (err) throw err;
   const dbo = db.db("reservations");
 
-  const [offers, places] = await Promise.all([
-    getOffers(),
-    getPlaces()
-  ])
+  const [offers, places] = await Promise.all([getOffers(), getPlaces()]);
 
   dbo.collection("offers").insertMany(offers, function (err, res) {
     if (err) throw err;
-    console.log("Saved offers")
+    console.log("Saved offers");
     dbo.collection("places").insertMany(places, function (err, res) {
-      if (err) throw err
-      console.log("Saved places")
-      db.close()
-    })
+      if (err) throw err;
+      console.log("Saved places");
+      db.close();
+    });
   });
-
 });
-
-
 
 const getOffers = () => {
   const offersFile = path.join(__dirname, "./offers.xml");
@@ -41,7 +35,7 @@ const getOffers = () => {
       );
       fileContent = fileContent.split("</offer>");
       fileContent.splice(fileContent.length - 1);
-      let offersToSave = []
+      let offersToSave = [];
       for (let i = 0; i < fileContent.length; i++) {
         let offer = fileContent[i];
         //console.log(offer);
@@ -49,8 +43,9 @@ const getOffers = () => {
         const idObject = getValueFromAttribute(offer, "idObject");
         offer = offer.replace("idObject", "");
         const id = getValueFromAttribute(offer, "id");
-        const readyFrom = new Date(getValueFromTag(offer, "readyFrom"))
+        const readyFrom = new Date(getValueFromTag(offer, "readyFrom"));
         const readyTo = new Date(getValueFromTag(offer, "readyTo"));
+        const name = getValueFromTag(offer, "name");
 
         const reservations = offer
           .slice(
@@ -59,22 +54,28 @@ const getOffers = () => {
           )
           .split("/>");
         reservations.splice(reservations.length - 1);
-        let convertedReservations = []
+        let convertedReservations = [];
         for (let k = 0; k < reservations.length; k++) {
-          const from = new Date(getValueFromAttribute(reservations[k], "from"))
-          const to = new Date(getValueFromAttribute(reservations[k], "to"))
+          const from = new Date(getValueFromAttribute(reservations[k], "from"));
+          const to = new Date(getValueFromAttribute(reservations[k], "to"));
           convertedReservations.push({
             from,
-            to
-          })
+            to,
+          });
         }
-        offersToSave.push({ id, idObject, readyFrom, readyTo, reservations: convertedReservations })
+        offersToSave.push({
+          id,
+          name,
+          idObject,
+          readyFrom,
+          readyTo,
+          reservations: convertedReservations,
+        });
       }
-      resolve(offersToSave)
+      resolve(offersToSave);
     });
-  })
-
-}
+  });
+};
 
 const getPlaces = () => {
   const placesFile = path.join(__dirname, "./places.xml");
@@ -90,21 +91,18 @@ const getPlaces = () => {
       );
       fileContent = fileContent.split("</place>");
       fileContent.splice(fileContent.length - 1);
-      let placesToSave = []
+      let placesToSave = [];
       for (let i = 0; i < fileContent.length; i++) {
         let place = fileContent[i];
         //console.log(offer);
         const id = getValueFromAttribute(place, "id");
-        const name = place.slice(place.search(">") + 1)
-        placesToSave.push({ id, name })
+        const name = place.slice(place.search(">") + 1);
+        placesToSave.push({ id, name });
       }
-      resolve(placesToSave)
+      resolve(placesToSave);
     });
-  })
-}
-
-
-
+  });
+};
 
 function getValueFromAttribute(str, attr) {
   let startPositionCut = str.slice(str.search(attr) + attr.length);
