@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node query.js",
     "dev": "nodemon query.js",
-    "import-data": "node import.js"
+    "import-data": "nodemon import.js"
   },
   "keywords": [],
   "author": "",
