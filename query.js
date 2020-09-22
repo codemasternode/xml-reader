@@ -39,16 +39,16 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
 
         offer.reservations.sort((a, b) => a.from - b.from);
         offer.reservations.forEach((reservation) => {
-          days.forEach((day) => {
+          days.forEach((day, index) => {
             if (day >= reservation.from && day <= reservation.to) {
-              day = null;
+              days[index] = null;
             }
           });
         });
 
-        days.map((day) => {
+        days.forEach((day, index) => {
           if (day < dateFrom || day > dateTo) {
-            day = null;
+            days[index] = null;
           }
         });
 
@@ -104,7 +104,7 @@ MongoClient.connect(url, { useUnifiedTopology: true }, async (err, db) => {
             to,
           });
         }
-      });
+      })
       selectedOffers.forEach((offer) => {
         console.log(
           `${offer.idObject} ${offer.id} ${dateToYYYYMMDD(
